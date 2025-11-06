@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - GSAP Store</title>
+
+  <!-- Fonte e GSAP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #0b0b0b;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #051bab;
+      font-weight: 700;
+    }
+
+    section {
+      margin: 4rem 0;
+      text-align: center;
+    }
+
+    /* ==== CARROSSEL ==== */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 2rem 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 1s ease-in-out;
+      gap: 1.5rem;
+      will-change: transform;
+    }
+
+    .card {
+      background: #141414;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      overflow: hidden;
+      min-width: 300px;
+      max-width: 330px;
+      flex: 0 0 calc(25% - 1rem);
+      transform-origin: center;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    @media (max-width: 1024px) {
+      .card {
+        flex: 0 0 calc(33.333% - 1rem);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        flex: 0 0 calc(50% - 1rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        flex: 0 0 90%;
+      }
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-content {
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .offer-tag {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-content h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+      color: #fff;
+    }
+
+    .card-content p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .price {
+      margin-top: 0.6rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #00ff88;
+    }
+
+    /* ==== SCROLL SECTION ==== */
+    .scroll-section {
+      opacity: 0;
+      transform: translateY(80px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ofertas da Semana</h1>
+  </header>
+
+  <section class="carousel-section">
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- CARD 1 -->
+        <div class="card">
+          <img src="https://picsum.photos/1080/1080?random=1" alt="Produto 1">
+          <div class="card-content">
+            <span class="offer-tag">OFERTA DO DIA</span>
+            <h3>Produto 1</h3>
+            <p>Por João - Turma A</p>
+            <div class="price">R$ 99,90</div>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card">
+          <img src="https://picsum.photos/1080/1080?random=2" alt="Produto 2">
+          <div class="card-content">
+            <span class="offer-tag">DESTAQUE</span>
+            <h3>Produto 2</h3>
+            <p>Por Maria - Turma B</p>
+            <div class="price">R$ 89,90</div>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card">
+          <img src="https://picsum.photos/1080/1080?random=3" alt="Produto 3">
+          <div class="card-content">
+            <span class="offer-tag">NOVO</span>
+            <h3>Produto 3</h3>
+            <p>Por Carlos - Turma C</p>
+            <div class="price">R$ 120,00</div>
+          </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="card">
+          <img src="https://picsum.photos/1080/1080?random=4" alt="Produto 4">
+          <div class="card-content">
+            <span class="offer-tag">OFERTA</span>
+            <h3>Produto 4</h3>
+            <p>Por Ana - Turma D</p>
+            <div class="price">R$ 110,00</div>
+          </div>
+        </div>
+
+        <!-- CARD 5 -->
+        <div class="card">
+          <img src="https://picsum.photos/1080/1080?random=5" alt="Produto 5">
+          <div class="card-content">
+            <span class="offer-tag">PROMOÇÃO</span>
+            <h3>Produto 5</h3>
+            <p>Por Lucas - Turma E</p>
+            <div class="price">R$ 75,50</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scroll-section">
+    <h2>Descubra mais produtos incríveis!</h2>
+    <p>.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Seu Site. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // === Animação de entrada e saída dos cards ===
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach((card, i) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 80 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            end: "bottom 10%",
+            toggleActions: "play reverse play reverse"
+          }
+        }
+      );
+    });
+
+    // === Animações globais ===
+    gsap.utils.toArray(".scroll-section").forEach((section, i) => {
+      gsap.fromTo(section,
+        { opacity: 0, y: 100 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+            toggleActions: "play reverse play reverse"
+          }
+        });
+    });
+
+    // === Carrossel automático ===
+    const track = document.getElementById("carouselTrack");
+    let index = 0;
+    const cardsPerView = 4;
+    const totalCards = document.querySelectorAll(".card").length;
+
+    setInterval(() => {
+      index++;
+      if (index > totalCards - cardsPerView) index = 0;
+      track.style.transform = `translateX(-${index * (100 / cardsPerView)}%)`;
+    }, 5500);
+  </script>
+</body>
+</html>
