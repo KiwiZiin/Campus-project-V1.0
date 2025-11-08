@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Produto — Campus MarketPlace</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#070708; --card:#0f1113; --muted:#bfc6d6; --white:#fff;
+      --accent:#0b63ff; --radius:14px; --shadow:0 12px 36px rgba(0,0,0,0.6);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;scroll-behavior:smooth}
+    body{
+      background:radial-gradient(circle at 10% 30%,#0a0b0e 0%,#050506 100%);
+      color:var(--muted);
+      font-family:"Poppins",sans-serif;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    header{
+      position:fixed;top:0;left:0;right:0;height:68px;z-index:1000;
+      background:rgba(5,7,8,0.8);backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+    header img{height:36px;filter:drop-shadow(0 0 10px rgba(0,98,255,0.4));}
+
+    main{padding-top:100px;}
+
+    /* Layout principal */
+    .layout{
+      display:grid;grid-template-columns:1.6fr 1fr;gap:32px;
+      max-width:1150px;margin:0 auto;padding:20px;
+    }
+
+    /* Produto principal */
+    .product-card{
+      background:rgba(15,17,19,0.9);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+    .gallery{
+      border-radius:14px;overflow:hidden;position:relative;
+    }
+    .gallery img{
+      width:100%;height:420px;object-fit:cover;
+      transform:scale(1.05);
+      transition:transform 0.6s ease;
+    }
+    .gallery:hover img{transform:scale(1.08);}
+    .title{color:var(--white);font-size:28px;font-weight:700;margin-top:16px;}
+    .seller{margin-top:6px;color:rgba(255,255,255,0.75);font-weight:500;}
+    .info-block{
+      margin-top:16px;
+      background:rgba(255,255,255,0.03);
+      border-left:4px solid var(--accent);
+      padding:12px 14px;
+      border-radius:10px;
+      color:rgba(255,255,255,0.9);
+    }
+    .desc{margin-top:14px;line-height:1.6;color:rgba(255,255,255,0.88);}
+
+    /* Card de preço fixo */
+    aside.price-aside{align-self:start;}
+    .price-box{
+      position:sticky;top:100px;
+      background:rgba(10,12,14,0.7);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.05);
+      border-radius:var(--radius);
+      padding:24px;text-align:center;
+      box-shadow:0 10px 40px rgba(0,0,0,0.7);
+    }
+    .price-box h2{color:var(--white);font-size:32px;font-weight:800;margin-bottom:6px;}
+    .price-sub{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:18px;}
+    .btn{
+      display:inline-block;width:100%;padding:12px 16px;
+      border-radius:10px;font-weight:700;font-size:15px;
+      border:none;cursor:pointer;transition:all 0.25s ease;
+    }
+    .btn.buy{
+      background:var(--accent);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(11,99,255,0.3);
+    }
+    .btn.buy:hover{
+      transform:scale(1.03);
+      box-shadow:0 12px 24px rgba(11,99,255,0.45);
+    }
+    .btn.chat{
+      margin-top:10px;
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.1);
+      color:rgba(255,255,255,0.8);
+    }
+    .btn.chat:hover{
+      background:rgba(255,255,255,0.08);
+      transform:scale(1.02);
+    }
+
+    /* Outros produtos */
+    .related{
+      margin:60px auto;max-width:1150px;padding:0 20px;
+    }
+    .related h3{color:var(--white);font-size:22px;margin-bottom:16px;}
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+    }
+    .rel-card{
+      background:rgba(15,17,19,0.9);
+      border-radius:14px;
+      overflow:hidden;
+      transition:transform 0.4s ease, box-shadow 0.4s ease;
+      cursor:pointer;
+    }
+    .rel-card:hover{
+      transform:translateY(-6px) scale(1.03);
+      box-shadow:0 14px 26px rgba(0,0,0,0.5);
+    }
+    .rel-card img{width:100%;height:160px;object-fit:cover;}
+    .rel-info{padding:12px;}
+    .rel-info h4{color:var(--white);font-size:16px;margin-bottom:4px;}
+    .rel-info .price{color:var(--accent);font-weight:600;}
+
+    footer{text-align:center;padding:30px;color:rgba(255,255,255,0.4);font-size:14px;}
+
+    /* Botão Voltar */
+    .back-btn{
+      position:fixed;
+      bottom:24px;left:24px;
+      background:rgba(15,17,19,0.8);
+      backdrop-filter:blur(8px);
+      color:var(--white);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:12px;
+      padding:12px 18px;
+      font-weight:600;
+      display:flex;align-items:center;gap:8px;
+      cursor:pointer;
+      z-index:1500;
+      box-shadow:0 8px 20px rgba(0,0,0,0.5);
+      transition:all 0.3s ease;
+    }
+    .back-btn:hover{
+      background:var(--accent);
+      transform:translateY(-3px);
+      box-shadow:0 12px 24px rgba(11,99,255,0.4);
+    }
+    .back-btn span{font-size:16px;}
+
+    @media(max-width:960px){
+      .layout{grid-template-columns:1fr;}
+      .gallery img{height:320px;}
+    }
+  </style>
+</head>
+<body>
+
+<header><img src="images/logo pji.png" alt="Logo"></header>
+
+<!-- Botão voltar -->
+<button class="back-btn" onclick="window.location.href='index.html'">
+  <span>←</span> Voltar ao início
+</button>
+
+<main>
+  <div class="layout">
+    <section class="product-card">
+      <div class="gallery"><img id="productImage" src="https://guiadacozinha.com.br/wp-content/uploads/2014/01/Sanduiche-natural.jpg"></div>
+      <h1 class="title" id="productName">Lanche Natural</h1>
+      <div class="seller" id="productSeller">Vendedor: João Pereira</div>
+      <div class="info-block" id="campusInfo">
+        <div><strong>Local:</strong> INI</div>
+        <div><strong>Horário:</strong> Intervalo das 10h00 às 10h30</div>
+        <div><strong>Ano:</strong> 2º Ano</div>
+      </div>
+      <div class="desc" id="productDesc">
+        Lanche leve e saudável com ingredientes frescos. Ideal para o intervalo.
+      </div>
+    </section>
+
+    <aside class="price-aside">
+      <div class="price-box" id="priceBox">
+        <h2 id="priceLabel">R$ 7,50</h2>
+        <div class="price-sub">Pagamento via Pix ou Dinheiro</div>
+        <button class="btn buy" id="buyBtn"> Comprar</button>
+        <button class="btn chat" id="chatBtn"> Conversar</button>
+      </div>
+    </aside>
+  </div>
+
+  <section class="related">
+    <h3>Outros produtos do campus</h3>
+    <div class="related-grid" id="relatedGrid">
+      <div class="rel-card" data-nome="Brownie" data-preco="6,00" data-img="https://comidinhasdochef.com/wp-content/uploads/2019/07/Brownie-de-Chocolate-F%C3%A1cil.jpg">
+        <img src="https://comidinhasdochef.com/wp-content/uploads/2019/07/Brownie-de-Chocolate-F%C3%A1cil.jpg" alt="">
+        <div class="rel-info"><h4>Brownie</h4><div class="price">R$ 6,00</div></div>
+      </div>
+      <div class="rel-card" data-nome="Café Gelado" data-preco="8,00" data-img="https://villacafe.com.br/blog/wp-content/uploads/2016/11/cafe-gelado-confira-4-receitas-deliciosas-para-fazer-em-casa.jpeg">
+        <img src="https://villacafe.com.br/blog/wp-content/uploads/2016/11/cafe-gelado-confira-4-receitas-deliciosas-para-fazer-em-casa.jpeg" alt="">
+        <div class="rel-info"><h4>Café Gelado</h4><div class="price">R$ 8,00</div></div>
+      </div>
+      <div class="rel-card" data-nome="Doces Caseiros" data-preco="4,00" data-img="https://docescaseirospaulinho.com.br/wp-content/uploads/2021/11/doces-caseiros-paulinho-misto-001-570x622.jpg">
+        <img src="https://docescaseirospaulinho.com.br/wp-content/uploads/2021/11/doces-caseiros-paulinho-misto-001-570x622.jpg" alt="">
+        <div class="rel-info"><h4>Doces Caseiros</h4><div class="price">R$ 4,00</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>Campus MarketPlace — IFSP São Miguel Paulista 2025</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Animações de entrada
+  gsap.from(".gallery img", {duration:1, scale:1.15, opacity:0, ease:"power3.out"});
+  gsap.from(".title, .seller", {y:20, opacity:0, duration:0.8, stagger:0.15, delay:0.3});
+  gsap.from(".info-block, .desc", {y:30, opacity:0, duration:1, delay:0.5, ease:"power2.out"});
+  gsap.from(".price-box", {x:50, opacity:0, duration:1, delay:0.4});
+  gsap.from(".back-btn", {x:-50, opacity:0, duration:1, delay:0.8, ease:"power2.out"});
+
+  // Parallax suave
+  gsap.to(".gallery img", {
+    yPercent:15,
+    ease:"none",
+    scrollTrigger:{
+      trigger:".gallery",
+      start:"top bottom",
+      scrub:true
+    }
+  });
+
+  // Animação nos cards relacionados
+  gsap.utils.toArray(".rel-card").forEach((card, i)=>{
+    gsap.from(card, {
+      scrollTrigger:{trigger:card, start:"top 90%"},
+      opacity:0, y:30, duration:0.8, delay:i*0.1, ease:"power2.out"
+    });
+  });
+
+  // Clique nos produtos relacionados
+  document.querySelectorAll('.rel-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const nome=encodeURIComponent(card.dataset.nome);
+      const preco=encodeURIComponent(card.dataset.preco);
+      const img=encodeURIComponent(card.dataset.img);
+      window.location.href=`${location.pathname}?nome=${nome}&preco=${preco}&img=${img}`;
+    });
+  });
+</script>
+</body>
+</html>
