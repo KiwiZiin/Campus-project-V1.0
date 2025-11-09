@@ -1,404 +1,338 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Campus MarketPlace</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Campus MarketPlace</title>
 
-  <!-- Fonte e GSAP -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<!-- Fonte e GSAP -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-  <style>
-    :root {
-      --bg: #0a0a0a;
-      --card: #111214;
-      --muted: #bfc6d6;
-      --white: #ffffff;
-      --accent: #0062ff;
-      --radius: 14px;
-      --shadow: 0 6px 20px rgba(0,0,0,0.45);
-      font-family: "Poppins", sans-serif;
-    }
+<style>
+:root {
+  --bg: #0a0a0a;
+  --card: #111214;
+  --muted: #bfc6d6;
+  --white: #ffffff;
+  --accent: #0062ff;
+  --radius: 14px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.45);
+  font-family: "Poppins", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--muted); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-      scroll-behavior: smooth;
-    }
+/* HEADER */
+header {
+  position: fixed;
+  top: 0; width: 100%;
+  backdrop-filter: blur(15px);
+  background: rgba(10,10,10,0.65);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 100;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: background 0.3s ease;
+}
+header.scrolled { background: rgba(10,10,10,0.85); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.header-inner { display: flex; justify-content: space-between; align-items: center; height: 70px; }
+.brand img { height: 40px; max-width: 130px; filter: drop-shadow(0 0 6px rgba(0,98,255,0.4)); }
+nav { display: flex; gap: 10px; align-items: center; }
+.btn { padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s ease; }
+.btn.primary { background: var(--accent); color: var(--white); box-shadow: 0 0 12px rgba(0,98,255,0.4); }
+.btn.outline { border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--muted); }
+.btn.ghost { background: transparent; color: var(--muted); }
+.btn:hover { transform: translateY(-2px) scale(1.05); }
 
-    body {
-      background: var(--bg);
-      color: var(--muted);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
+/* FOTO PERFIL NO NAV */
+.profile-pic {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 10px rgba(0,98,255,0.4);
+  transition: transform .3s ease;
+}
+.profile-pic:hover { transform: scale(1.1); }
+.profile-pic img { width: 100%; height: 100%; object-fit: cover; }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+/* POPUP DE PERFIL */
+.profile-popup {
+  position: fixed;
+  top: 85px; right: 20px;
+  width: 280px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 20px;
+  color: var(--white);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  z-index: 999;
+  transition: all .4s ease;
+}
+.profile-popup.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.profile-popup h3 {margin-bottom: 6px;color: var(--accent);}
+.profile-popup p {font-size:14px;line-height:1.4;}
+.profile-popup .tag {display:inline-block;margin:5px 0;padding:4px 8px;background:var(--accent);border-radius:8px;font-size:12px;color:#fff;}
+.profile-popup hr {border: none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0;}
+.pix-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.pix-info img {
+  width: 20px; height: 20px;
+  filter: brightness(0) invert(1);
+}
+.verificado {
+  color: #00ff88;
+  font-size: 14px;
+  margin-left: 4px;
+}
 
-    /* HEADER */
-    header {
-      position: fixed;
-      top: 0; width: 100%;
-      backdrop-filter: blur(15px);
-      background: rgba(10,10,10,0.65);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      z-index: 100;
-      transform: translateY(-100%);
-      opacity: 0;
-      transition: background 0.3s ease;
-    }
-    header.scrolled {
-      background: rgba(10,10,10,0.85);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
+/* HERO */
+.hero { padding-top: 130px; padding-bottom: 90px; text-align: center; position: relative; overflow: hidden; }
+.split-title { font-size: 64px; font-weight: 800; color: var(--white); line-height: 1; text-shadow: 0 0 15px rgba(0,98,255,0.25); }
+.split-title .accent { color: var(--accent); }
+.lead { margin: 18px auto; font-size: 20px; color: rgba(255,255,255,0.75); max-width: 700px; }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+section { padding: 70px 0; }
+.section-title { color: var(--white); font-size: 30px; margin-bottom: 25px; text-align: center; font-weight: 700; }
 
-    .header-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 70px;
-    }
+/* === CARROSSEL === */
+.carousel-wrapper { position: relative; overflow: hidden; width: 100%; margin: 0 auto; }
+.carousel-track { display: flex; gap: 16px; will-change: transform; }
+.carousel-item { flex: 0 0 calc(33.333% - 16px); background: var(--card); border-radius: var(--radius); overflow: hidden; color: var(--white); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow); transform: scale(0.98); transition: transform 0.4s ease, box-shadow 0.4s ease; cursor: pointer; }
+.carousel-item:hover { transform: scale(1.04); box-shadow: 0 8px 30px rgba(0,98,255,0.25); }
+.carousel-item img { width: 100%; height: 280px; object-fit: cover; }
+.carousel-content { padding: 16px; }
+.badge { background: var(--accent); color: var(--white); font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; margin-bottom: 6px; display: inline-block; }
+.price { margin-top: 10px; font-size: 20px; color: var(--accent); font-weight: 700; }
+.carousel-controls { position: absolute; top: 45%; width: 100%; display: flex; justify-content: space-between; pointer-events: none; }
+.carousel-btn { background: rgba(255,255,255,0.1); border: none; color: var(--white); font-size: 22px; border-radius: 50%; width: 42px; height: 42px; cursor: pointer; pointer-events: all; transition: 0.3s; }
+.carousel-btn:hover { background: var(--accent); transform: scale(1.1); }
 
-    .brand img {
-      height: 40px;
-      max-width: 130px;
-      filter: drop-shadow(0 0 6px rgba(0,98,255,0.4));
-    }
+/* === GRIDS === */
+.about-grid, .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.about-card, .feature { background: var(--card); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); transition: transform 0.4s ease, background 0.3s ease; }
+.about-card:hover, .feature:hover { transform: translateY(-8px); background: rgba(0,98,255,0.08); }
 
-    nav {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
+/* CTA */
+.cta { background: linear-gradient(90deg, rgba(22,112,255,0.15), rgba(22,112,255,0.05)); padding: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: var(--shadow); }
 
-    .btn {
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn.primary { background: var(--accent); color: var(--white); box-shadow: 0 0 12px rgba(0,98,255,0.4); }
-    .btn.outline { border: 1px solid rgba(255,255,255,0.1); background: transparent; color: var(--muted); }
-    .btn.ghost { background: transparent; color: var(--muted); }
-    .btn:hover { transform: translateY(-2px) scale(1.05); }
+/* FOOTER */
+footer { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: rgba(255,255,255,0.35); }
 
-    /* HERO */
-    .hero {
-      padding-top: 130px;
-      padding-bottom: 90px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .split-title {
-      font-size: 64px;
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1;
-      text-shadow: 0 0 15px rgba(0,98,255,0.25);
-    }
-    .split-title .accent { color: var(--accent); }
-    .lead {
-      margin: 18px auto;
-      font-size: 20px;
-      color: rgba(255,255,255,0.75);
-      max-width: 700px;
-    }
-    .hero-cta {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    section { padding: 70px 0; }
-    .section-title {
-      color: var(--white);
-      font-size: 30px;
-      margin-bottom: 25px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    /* === CARROSSEL === */
-    .carousel-wrapper {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    .carousel-track {
-      display: flex;
-      gap: 16px;
-      will-change: transform;
-    }
-
-    .carousel-item {
-      flex: 0 0 calc(33.333% - 16px);
-      background: var(--card);
-      border-radius: var(--radius);
-      overflow: hidden;
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.05);
-      box-shadow: var(--shadow);
-      transform: scale(0.98);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-    .carousel-item:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 30px rgba(0,98,255,0.25);
-    }
-
-    .carousel-item img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-    }
-    .carousel-content { padding: 16px; }
-
-    .badge {
-      background: var(--accent);
-      color: var(--white);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      display: inline-block;
-    }
-    .price { margin-top: 10px; font-size: 20px; color: var(--accent); font-weight: 700; }
-
-    .carousel-controls {
-      position: absolute;
-      top: 45%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-
-    .carousel-btn {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: var(--white);
-      font-size: 22px;
-      border-radius: 50%;
-      width: 42px; height: 42px;
-      cursor: pointer;
-      pointer-events: all;
-      transition: 0.3s;
-    }
-    .carousel-btn:hover { background: var(--accent); transform: scale(1.1); }
-
-    /* === GRIDS === */
-    .about-grid, .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-    }
-    .about-card, .feature {
-      background: var(--card);
-      padding: 24px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: transform 0.4s ease, background 0.3s ease;
-    }
-    .about-card:hover, .feature:hover {
-      transform: translateY(-8px);
-      background: rgba(0,98,255,0.08);
-    }
-
-    /* CTA */
-    .cta {
-      background: linear-gradient(90deg, rgba(22,112,255,0.15), rgba(22,112,255,0.05));
-      padding: 40px;
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      box-shadow: var(--shadow);
-    }
-
-    footer {
-      padding: 40px 0;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      text-align: center;
-      color: rgba(255,255,255,0.35);
-    }
-
-    /* === RESPONSIVO === */
-    @media (max-width: 999px) {
-      .carousel-item { flex: 0 0 calc(50% - 16px); }
-    }
-    @media (max-width: 699px) {
-      .split-title { font-size: 40px; }
-      .lead { font-size: 16px; }
-      .carousel-item { flex: 0 0 100%; }
-      .carousel-item img { height: 220px; }
-      nav { display: none; }
-    }
-  </style>
+/* === RESPONSIVO === */
+@media (max-width: 999px) { .carousel-item { flex: 0 0 calc(50% - 16px); } }
+@media (max-width: 699px) {
+  .split-title { font-size: 40px; }
+  .lead { font-size: 16px; }
+  .carousel-item { flex: 0 0 100%; }
+  .carousel-item img { height: 220px; }
+  nav { display: none; }
+}
+</style>
 </head>
 
 <body>
-  <header>
-    <div class="container header-inner">
-      <div class="brand">
-        <img src="images/logo pji.png" alt="Logo">
-      </div>
-      <nav>
-        <a href="#about" class="btn ghost">Sobre</a>
-        <a href="#features" class="btn ghost">Funcionalidades</a>
-        <a href="login.html"><button class="btn outline">Entrar</button></a>
-        <button class="btn primary">Cadastrar</button>
-      </nav>
+<header>
+  <div class="container header-inner">
+    <div class="brand">
+      <img src="images/logo pji.png" alt="Logo">
     </div>
-  </header>
+    <nav>
+      <a href="#about" class="btn ghost">Sobre</a>
+      <a href="#features" class="btn ghost">Funcionalidades</a>
+      <a href="login.html"><button class="btn outline">Entrar</button></a>
+      <button class="btn primary">Cadastrar</button>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <h1 class="split-title">Campus <span class="accent">MarketPlace</span></h1>
-      <p class="lead">Conecte alunos e fortaleça a comunidade estudantil através do comércio colaborativo.</p>
-      <div class="hero-cta">
-        <a href="login.html"><button class="btn primary">Começar</button></a>
-        <a href="produtos.html"><button class="btn outline">Ver Produtos</button></a>
+      <!-- FOTO PERFIL -->
+      <div class="profile-pic" id="profileBtn">
+        <img src="https://suap.ifsp.edu.br/media/alunos/fotos/2023/BSXJq6HJAlFu1o3oEJbSCpSi1fDpbnKjzDuhuZi2q34.jpg" alt="Perfil">
       </div>
-    </section>
+    </nav>
+  </div>
+</header>
 
-    <!-- CARROSSEL -->
-    <section id="carousel">
-      <div class="container">
-        <h2 class="section-title">Anúncios Recentes</h2>
-        <div class="carousel-wrapper">
-          <div class="carousel-track">
-
-            <div class="carousel-item" onclick="window.location.href='produto.html?nome=Lanche+Natural&preco=7,50&img=https://guiadacozinha.com.br/wp-content/uploads/2014/01/Sanduiche-natural.jpg&vendedor=João+Pereira&tag=DESTAQUE'">
-  <img src="https://guiadacozinha.com.br/wp-content/uploads/2014/01/Sanduiche-natural.jpg">
-  <div class="carousel-content">
-    <span class="badge">DESTAQUE</span>
-    <h3>Lanche Natural</h3>
-    <p><strong>João Pereira</strong></p>
-    <div class="price">R$ 7,50</div>
+<!-- POPUP PERFIL -->
+<div class="profile-popup" id="profilePopup">
+  <h3>Lucas Rodrigues Gomes (kiwi) ✅<span class="verificado">Verificado</span></h3>
+  <span class="tag">3º Ano - Informática</span>
+  <p><strong>Horários:</strong> 10h às 13h</p>
+  <hr>
+  <p><strong>Produtos:</strong><br>Trufas artesanais, doces caseiros e brownies.</p>
+  <hr>
+  <div class="pix-info">
+    <img src="https://img.icons8.com/color/512/pix.png" alt="Pix">
+    <div>
+      <p><strong>Chave Pix:</strong> Telefone</p>
+      <p>(11) 99999-8888</p>
+    </div>
   </div>
 </div>
-          <div class="carousel-item"><img src="https://www.valedosvinhedos.com.br/admin/plugins/kcfinder/upload/images/Screenshot_20240423-151135-236.png"><div class="carousel-content"><span class="badge">OFERTA</span><h3>Trufas Artesanais</h3><p><strong>Maria Santos</strong></p><div class="price">R$ 5,00</div></div></div> 
-            <!-- <div class="carousel-item"><img src="https://guiadacozinha.com.br/wp-content/uploads/2014/01/Sanduiche-natural.jpg"><div class="carousel-content"><span class="badge">DESTAQUE</span><h3>Lanche Natural</h3><p><strong>João Pereira</strong></p><div class="price">R$ 7,50</div></div></div>  -->
-            <div class="carousel-item"><img src="https://docescaseirospaulinho.com.br/wp-content/uploads/2021/11/doces-caseiros-paulinho-misto-001-570x622.jpg"><div class="carousel-content"><span class="badge">PROMOÇÃO</span><h3>Doces Caseiros</h3><p><strong>Ana Costa</strong></p><div class="price">R$ 4,00</div></div></div>
-            <div class="carousel-item"><img src="https://comidinhasdochef.com/wp-content/uploads/2019/07/Brownie-de-Chocolate-F%C3%A1cil.jpg"><div class="carousel-content"><span class="badge">NOVO</span><h3>Brownie</h3><p><strong>Pedro Lima</strong></p><div class="price">R$ 6,00</div></div></div>
-            <div class="carousel-item"><img src="https://villacafe.com.br/blog/wp-content/uploads/2016/11/cafe-gelado-confira-4-receitas-deliciosas-para-fazer-em-casa.jpeg"><div class="carousel-content"><span class="badge">DESTAQUE</span><h3>Café Gelado</h3><p><strong>Luiza Rocha</strong></p><div class="price">R$ 8,00</div></div></div>
-            <div class="carousel-item"><img src="https://cdn.sistemawbuy.com.br/arquivos/2d14338183f270b5685c7e13de7ac741/produtos/64bd583ae825b/caneca-personalizada-flock-engraa-ada-divertida-presente-de-aniversario-xicara-zueira-pa-amiga-linda-64bd583ce815a.jpg"><div class="carousel-content"><span class="badge">OFERTA</span><h3>Canecas Personalizadas</h3><p><strong>Carlos Souza</strong></p><div class="price">R$ 15,00</div></div></div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="split-title">Campus <span class="accent">MarketPlace</span></h1>
+    <p class="lead">Conecte alunos e fortaleça a comunidade estudantil através do comércio colaborativo.</p>
+    <div class="hero-cta">
+      <a href="login.html"><button class="btn primary">Começar</button></a>
+      <a href="produtos.html"><button class="btn outline">Ver Produtos</button></a>
+    </div>
+  </section>
+
+  <!-- CARROSSEL -->
+  <section id="carousel">
+    <div class="container">
+      <h2 class="section-title">Anúncios Recentes</h2>
+      <div class="carousel-wrapper">
+        <div class="carousel-track">
+          <!-- Lanche natural clicável -->
+          <div class="carousel-item" id="lancheNatural">
+            <img src="https://guiadacozinha.com.br/wp-content/uploads/2014/01/Sanduiche-natural.jpg">
+            <div class="carousel-content">
+              <span class="badge">DESTAQUE</span>
+              <h3>Lanche Natural</h3>
+              <p><strong>João Pereira</strong></p>
+              <div class="price">R$ 7,50</div>
+            </div>
           </div>
-          <div class="carousel-controls">
-            <button class="carousel-btn" id="prevBtn">⟵</button>
-            <button class="carousel-btn" id="nextBtn">⟶</button>
-          </div>
+
+          <div class="carousel-item"><img src="https://www.valedosvinhedos.com.br/admin/plugins/kcfinder/upload/images/Screenshot_20240423-151135-236.png"><div class="carousel-content"><span class="badge">OFERTA</span><h3>Trufas Artesanais</h3><p><strong>Maria Santos</strong></p><div class="price">R$ 5,00</div></div></div>
+
+          <div class="carousel-item"><img src="https://docescaseirospaulinho.com.br/wp-content/uploads/2021/11/doces-caseiros-paulinho-misto-001-570x622.jpg"><div class="carousel-content"><span class="badge">PROMOÇÃO</span><h3>Doces Caseiros</h3><p><strong>Ana Costa</strong></p><div class="price">R$ 4,00</div></div></div>
+
+          <div class="carousel-item"><img src="https://comidinhasdochef.com/wp-content/uploads/2019/07/Brownie-de-Chocolate-F%C3%A1cil.jpg"><div class="carousel-content"><span class="badge">NOVO</span><h3>Brownie</h3><p><strong>Pedro Lima</strong></p><div class="price">R$ 6,00</div></div></div>
+
+          <div class="carousel-item"><img src="https://villacafe.com.br/blog/wp-content/uploads/2016/11/cafe-gelado-confira-4-receitas-deliciosas-para-fazer-em-casa.jpeg"><div class="carousel-content"><span class="badge">DESTAQUE</span><h3>Café Gelado</h3><p><strong>Luiza Rocha</strong></p><div class="price">R$ 8,00</div></div></div>
+
+          <div class="carousel-item"><img src="https://cdn.sistemawbuy.com.br/arquivos/2d14338183f270b5685c7e13de7ac741/produtos/64bd583ae825b/caneca-personalizada-flock-engraa-ada-divertida-presente-de-aniversario-xicara-zueira-pa-amiga-linda-64bd583ce815a.jpg"><div class="carousel-content"><span class="badge">OFERTA</span><h3>Canecas Personalizadas</h3><p><strong>Carlos Souza</strong></p><div class="price">R$ 15,00</div></div></div>
+        </div>
+
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prevBtn">⟵</button>
+          <button class="carousel-btn" id="nextBtn">⟶</button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SOBRE -->
-    <section id="about">
-      <div class="container">
-        <h2 class="section-title">Sobre o Projeto</h2>
-        <div class="about-grid">
-          <div class="about-card"><h3>Objetivo</h3><p>Conectar estudantes e incentivar o comércio dentro do campus.</p></div>
-          <div class="about-card"><h3>Metodologia</h3><p>Projeto integrador com foco em tecnologia e colaboração.</p></div>
-          <div class="about-card"><h3>Impacto</h3><p>Fortalece a economia local e o espírito estudantil.</p></div>
-        </div>
+  <!-- SOBRE -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">Sobre o Projeto</h2>
+      <div class="about-grid">
+        <div class="about-card"><h3>Objetivo</h3><p>Conectar estudantes e incentivar o comércio dentro do campus.</p></div>
+        <div class="about-card"><h3>Metodologia</h3><p>Projeto integrador com foco em tecnologia e colaboração.</p></div>
+        <div class="about-card"><h3>Impacto</h3><p>Fortalece a economia local e o espírito estudantil.</p></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FUNCIONALIDADES -->
-    <section id="features">
-      <div class="container">
-        <h2 class="section-title">Funcionalidades</h2>
-        <div class="features-grid">
-          <div class="feature"><h4>Anúncios</h4><p>Publique seus produtos facilmente.</p></div>
-          <div class="feature"><h4>Chat</h4><p>Converse diretamente com colegas.</p></div>
-          <div class="feature"><h4>Pagamentos</h4><p>Negocie via Pix ou presencial.</p></div>
-          <div class="feature"><h4>Login Seguro</h4><p>Acesso com e-mail institucional.</p></div>
-        </div>
+  <!-- FUNCIONALIDADES -->
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Funcionalidades</h2>
+      <div class="features-grid">
+        <div class="feature"><h4>Anúncios</h4><p>Publique seus produtos facilmente.</p></div>
+        <div class="feature"><h4>Chat</h4><p>Converse diretamente com colegas.</p></div>
+        <div class="feature"><h4>Pagamentos</h4><p>Negocie via Pix ou presencial.</p></div>
+        <div class="feature"><h4>Login Seguro</h4><p>Acesso com e-mail institucional.</p></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="cta">
-      <div>
-        <h3>Pronto para participar?</h3>
-        <p>Junte-se à comunidade e comece agora.</p>
-      </div>
-     <a href="login.html"> <button class="btn primary">Começar Agora</button></a>
-    </section>
-  </main>
+  <section class="cta">
+    <div>
+      <h3>Pronto para participar?</h3>
+      <p>Junte-se à comunidade e comece agora.</p>
+    </div>
+    <a href="login.html"><button class="btn primary">Começar Agora</button></a>
+  </section>
+</main>
 
-  <footer>
-    <p><strong>Campus MarketPlace</strong> — IFSP São Miguel Paulista 2025</p>
-  </footer>
+<footer>
+  <p><strong>Campus MarketPlace</strong> — IFSP São Miguel Paulista 2025</p>
+</footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      gsap.registerPlugin(ScrollTrigger);
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to("header",{y:0,opacity:1,duration:1,ease:"power3.out"});
+  window.addEventListener('scroll',()=>{document.querySelector("header").classList.toggle('scrolled',window.scrollY>60);});
+  gsap.from(".split-title span",{y:80,opacity:0,stagger:0.2,duration:1.2,ease:"power3.out"});
+  gsap.from(".lead",{opacity:0,y:40,delay:0.6,duration:0.8});
+  gsap.from(".hero-cta",{opacity:0,y:50,delay:0.9,duration:1});
+  gsap.utils.toArray([".about-card",".feature",".carousel-item",".cta"]).forEach(el=>{
+    gsap.from(el,{scrollTrigger:{trigger:el,start:"top 90%"},opacity:0,y:60,duration:0.8,ease:"power3.out"});
+  });
 
-      // HEADER
-      gsap.to("header", { y: 0, opacity: 1, duration: 1, ease: "power3.out" });
-      window.addEventListener('scroll', () => {
-        document.querySelector("header").classList.toggle('scrolled', window.scrollY > 60);
-      });
+  // Carrossel
+  const track=document.querySelector(".carousel-track");
+  const slides=Array.from(document.querySelectorAll(".carousel-item"));
+  const nextBtn=document.getElementById("nextBtn");
+  const prevBtn=document.getElementById("prevBtn");
+  let current=0;
+  let slideWidth=slides[0].offsetWidth+16;
+  let autoPlay;
+  const moveCarousel=(dir=1)=>{
+    current+=dir;
+    if(current<0)current=slides.length-1;
+    if(current>=slides.length)current=0;
+    gsap.to(track,{x:-current*slideWidth,duration:0.6,ease:"power2.out"});
+  };
+  nextBtn.addEventListener("click",()=>moveCarousel(1));
+  prevBtn.addEventListener("click",()=>moveCarousel(-1));
+  const startAuto=()=>autoPlay=setInterval(()=>moveCarousel(1),4000);
+  const stopAuto=()=>clearInterval(autoPlay);
+  startAuto();
+  track.addEventListener("mouseenter",stopAuto);
+  track.addEventListener("mouseleave",startAuto);
+  window.addEventListener("resize",()=>{slideWidth=slides[0].offsetWidth+16;moveCarousel(0);});
 
-      // HERO animações suaves
-      gsap.from(".split-title span", {
-        y: 80, opacity: 0, stagger: 0.2, duration: 1.2, ease: "power3.out"
-      });
-      gsap.from(".lead", { opacity: 0, y: 40, delay: 0.6, duration: 0.8 });
-      gsap.from(".hero-cta", { opacity: 0, y: 50, delay: 0.9, duration: 1 });
+  // POPUP PERFIL
+  const profileBtn=document.getElementById("profileBtn");
+  const profilePopup=document.getElementById("profilePopup");
+  let isOpen=false;
 
-      // Scroll Animations
-      gsap.utils.toArray([".about-card", ".feature", ".carousel-item", ".cta"]).forEach(el => {
-        gsap.from(el, {
-          scrollTrigger: { trigger: el, start: "top 90%" },
-          opacity: 0, y: 60, duration: 0.8, ease: "power3.out"
-        });
-      });
+  profileBtn.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    if(isOpen){
+      gsap.to(profilePopup,{opacity:0,y:-30,scale:0.9,duration:0.3,ease:"power2.in",onComplete:()=>profilePopup.classList.remove("active")});
+    } else {
+      profilePopup.classList.add("active");
+      gsap.fromTo(profilePopup,{opacity:0,y:-50,scale:0.9},{opacity:1,y:0,scale:1,duration:0.4,ease:"power2.out"});
+    }
+    isOpen=!isOpen;
+  });
 
-      // Carrossel com looping infinito
-      const track = document.querySelector(".carousel-track");
-      const slides = Array.from(document.querySelectorAll(".carousel-item"));
-      const nextBtn = document.getElementById("nextBtn");
-      const prevBtn = document.getElementById("prevBtn");
-      let current = 0;
-      let slideWidth = slides[0].offsetWidth + 16;
-      let autoPlay;
+  document.addEventListener("click",(e)=>{
+    const outside=!profilePopup.contains(e.target)&&!profileBtn.contains(e.target);
+    if(isOpen&&outside){
+      gsap.to(profilePopup,{opacity:0,y:-30,scale:0.9,duration:0.3,ease:"power2.in",onComplete:()=>profilePopup.classList.remove("active")});
+      isOpen=false;
+    }
+  });
 
-      const moveCarousel = (dir = 1) => {
-        current += dir;
-        if (current < 0) current = slides.length - 1;
-        if (current >= slides.length) current = 0;
-        gsap.to(track, { x: -current * slideWidth, duration: 0.6, ease: "power2.out" });
-      };
+  // Clique no lanche natural
+  document.getElementById("lancheNatural").addEventListener("click",()=>window.location.href="produto.html");
+});
+</script>
 
-      nextBtn.addEventListener("click", () => moveCarousel(1));
-      prevBtn.addEventListener("click", () => moveCarousel(-1));
-
-      const startAuto = () => autoPlay = setInterval(() => moveCarousel(1), 4000);
-      const stopAuto = () => clearInterval(autoPlay);
-      startAuto();
-
-      track.addEventListener("mouseenter", stopAuto);
-      track.addEventListener("mouseleave", startAuto);
-      window.addEventListener("resize", () => { slideWidth = slides[0].offsetWidth + 16; moveCarousel(0); });
-    });
-  </script>
 </body>
 </html>
