@@ -299,22 +299,24 @@ height: 30%;
 
     .Tela_esquerda {
         width: 100%;
-        height: 10vh;
+        height: 10.2vh;
         border-radius: 1rem 1rem 0 0;
+        
     }
 
     .Area_esquerda {
+        width: 90%;
         background-size: contain;
         background-position: center;
         border-radius: 1rem 1rem 0 0;
-        background-image: url(/images/logoCentralizada.png);
+        background-image: url(logoCentralizada.png);
     }
 
     .Tela_direita {
         width: 100%;
         height: auto;
         border-radius: 0 0 1rem 1rem;
-        padding: 2rem 0;
+        padding: 1rem 0;
     }
 
     .Area_login {
@@ -345,12 +347,13 @@ height: 30%;
     }
 
     #Botao_Cadastro {
-        flex-direction: column;
+        flex-direction: row;
         margin-top: 1rem;
     }
 
     #Botao_Cadastro a {
         font-size: 0.9rem;
+        
     }
 }
 
@@ -387,10 +390,6 @@ height: 30%;
         transform: translateX(50x);
     }
 }
-
-
-
-
 
 
 
