@@ -307,7 +307,7 @@ height: 30%;
         background-size: contain;
         background-position: center;
         border-radius: 1rem 1rem 0 0;
-        background-image: url(/images/logoCentralizada.jpg);
+        background-image: url(images/logoCentralizada.jpg);
     }
 
     .Tela_direita {
@@ -387,6 +387,7 @@ height: 30%;
         transform: translateX(50x);
     }
 }
+
 
 
 
